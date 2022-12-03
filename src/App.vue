@@ -1,6 +1,21 @@
 <template>
-  <input type="text" v-model="name" />
-  <button @click="onSubmit" class="btn btn-primary">Click</button>
+  <div class="container">
+    <h2>To-Do List</h2>
+    <form @submit.prevent="onSubmit" class="d-flex">
+      <div class="flex-grow-1 mr-2">
+        <input
+          class="form-control"
+          type="text"
+          v-model="todo"
+          placeholder="Type new to-do"
+        />
+      </div>
+      <div>
+        <button type="submit" class="btn btn-primary">Add</button>
+      </div>
+    </form>
+    {{ todos }}
+  </div>
 </template>
 
 <script>
@@ -8,19 +23,23 @@ import { ref } from "vue";
 
 export default {
   setup() {
-    const name = ref("Kossie");
+    const todo = ref("");
+    const todos = ref([]);
 
     const onSubmit = () => {
-      console.log(name.value);
+      todos.value.push({
+        id: Date.now(),
+        subject: todo.value,
+      });
     };
 
-    return { name, onSubmit };
+    return { todo, onSubmit, todos };
   },
 };
 </script>
 
 <style>
-.name {
+.todo {
   color: red;
 }
 </style>
