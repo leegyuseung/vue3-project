@@ -19,7 +19,20 @@
     </form>
     <div v-for="todo in todos" :key="todo.id" class="card mt-2">
       <div class="card-body p-2">
-        {{ todo.subject }}
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            v-model="todo.completed"
+          />
+          <!-- <label
+            class="form-check-label"
+            :style="todo.completed ? todoStyle : {}"
+          > -->
+          <label class="form-check-label" :class="{ todo: todo.completed }">
+            {{ todo.subject }}</label
+          >
+        </div>
       </div>
     </div>
   </div>
@@ -31,11 +44,12 @@ import { ref } from "vue";
 export default {
   setup() {
     const todo = ref("");
-    const todos = ref([
-      { id: 1, subject: "휴대폰 사기" },
-      { id: 2, subject: "장보기" },
-    ]);
+    const todos = ref([]);
     const hasError = ref(false);
+    const todoStyle = {
+      textDecoration: "line-through",
+      color: "gray",
+    };
 
     const onSubmit = () => {
       if (todo.value === "") {
@@ -44,18 +58,21 @@ export default {
         todos.value.push({
           id: Date.now(),
           subject: todo.value,
+          completed: false,
         });
+        todo.value = "";
         hasError.value = false;
       }
     };
 
-    return { hasError, onSubmit, todos, todo };
+    return { hasError, onSubmit, todoStyle, todos, todo };
   },
 };
 </script>
 
 <style>
 .todo {
-  color: red;
+  color: gray;
+  text-decoration: line-through;
 }
 </style>
