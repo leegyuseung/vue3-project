@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h2>To-Do List</h2>
-    <TodoSimpleForm />
+    <TodoSimpleForm @add-todo="addTodo" />
 
     <div v-if="!todos.length">추가된 Todo가 없습니다.</div>
     <div v-for="(todo, index) in todos" :key="todo.id" class="card mt-2">
@@ -40,32 +40,17 @@ export default {
   },
 
   setup() {
-    const todo = ref("");
     const todos = ref([]);
-    const hasError = ref(false);
-    const todoStyle = {
-      textDecoration: "line-through",
-      color: "gray",
-    };
 
-    const onSubmit = () => {
-      if (todo.value === "") {
-        hasError.value = true;
-      } else {
-        todos.value.push({
-          id: Date.now(),
-          subject: todo.value,
-          completed: false,
-        });
-        todo.value = "";
-        hasError.value = false;
-      }
+    const addTodo = (todo) => {
+      console.log(todo);
+      todos.value.push(todo);
     };
 
     const deleteTodo = (index) => {
       todos.value.splice(index, 1);
     };
-    return { deleteTodo, hasError, onSubmit, todoStyle, todos, todo };
+    return { deleteTodo, addTodo, todos };
   },
 };
 </script>
