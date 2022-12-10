@@ -35,6 +35,19 @@ export default {
   setup() {
     const todos = ref([]);
     const error = ref("");
+
+    const getTodos = async () => {
+      try {
+        const res = await axios.get("http://localhost:3000/todos");
+        todos.value = res.data;
+      } catch (err) {
+        console.log(err);
+        error.value = "Something went wrong.";
+      }
+    };
+
+    getTodos();
+
     const addTodo = async (todo) => {
       // 데이터베이스 투두를 저장
       error.value = "";
