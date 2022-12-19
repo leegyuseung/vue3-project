@@ -1,7 +1,7 @@
 <template>
   <h1>To-Do Page</h1>
   <div v-if="loading">loading...</div>
-  <form v-else>
+  <form v-else @submit.prevent="onSave">
     <div class="row">
       <div class="col-6">
         <div class="form-group">
@@ -59,8 +59,20 @@ export default {
         name: "Todos",
       });
     };
+
     getTodo();
-    return { todo, loading, toggleTodoStatus, moveToTodolistPage };
+
+    const onSave = async () => {
+      const res = await axios.put(
+        "http://localhost:3000/todos/" + route.params.id,
+        {
+          subject: todo.value.subject,
+          completed: todo.value.completed,
+        }
+      );
+      console.log(res);
+    };
+    return { todo, loading, toggleTodoStatus, moveToTodolistPage, onSave };
   },
 };
 </script>
