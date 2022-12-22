@@ -33,6 +33,7 @@
       Cancel
     </button>
   </form>
+  <Toast v-if="showToast" :message="toastMessage" :type="toastAlertType" />
 </template>
 
 <script>
@@ -40,22 +41,33 @@ import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
 import { ref, computed } from "vue";
 import _ from "lodash";
+import Toast from "@/components/ToastVue.vue";
+
 export default {
+  components: { Toast },
   setup() {
     const route = useRoute();
     const todo = ref(null);
     const orginalTodo = ref(null);
     const loading = ref(true);
     const router = useRouter();
+    const showToast = ref(false);
+    const toastMessage = ref("");
+    const toastAlertType = ref("");
 
     const getTodo = async () => {
-      const res = await axios.get(
-        "http://localhost:3000/todos/" + route.params.id
-      );
-      todo.value = { ...res.data };
-      orginalTodo.value = { ...res.data };
+      try {
+        const res = await axios.get(
+          "http://localhost:3000/todos/" + route.params.id
+        );
+        todo.value = { ...res.data };
+        orginalTodo.value = { ...res.data };
 
-      loading.value = false;
+        loading.value = false;
+      } catch (error) {
+        console.log(error);
+        triggerToast("Something went wrong", "danger");
+      }
     };
 
     const todoUpdated = computed(() => {
@@ -74,15 +86,32 @@ export default {
 
     getTodo();
 
+    const triggerToast = (message, type = "success") => {
+      toastMessage.value = message;
+      toastAlertType.value = type;
+      showToast.value = true;
+      setTimeout(() => {
+        toastMessage.value = "";
+        showToast.value = false;
+        toastAlertType.value = "";
+      }, 3000);
+    };
+
     const onSave = async () => {
-      const res = await axios.put(
-        "http://localhost:3000/todos/" + route.params.id,
-        {
-          subject: todo.value.subject,
-          completed: todo.value.completed,
-        }
-      );
-      orginalTodo.value = { ...res.data };
+      try {
+        const res = await axios.put(
+          "http://localhost:3000/todos/" + route.params.id,
+          {
+            subject: todo.value.subject,
+            completed: todo.value.completed,
+          }
+        );
+        orginalTodo.value = { ...res.data };
+        triggerToast("Successfully saved!");
+      } catch (error) {
+        console.log(error);
+        triggerToast("Something went wrong", "danger");
+      }
     };
     return {
       todo,
@@ -91,6 +120,9 @@ export default {
       moveToTodolistPage,
       onSave,
       todoUpdated,
+      toastMessage,
+      showToast,
+      toastAlertType,
     };
   },
 };
