@@ -6,6 +6,7 @@
         <div class="form-group">
           <label>Subject</label>
           <input v-model="todo.subject" type="text" class="form-control" />
+          <div v-if="subjectError" style="color: red">{{ subjectError }}</div>
         </div>
       </div>
       <div v-if="editing" class="col-6">
@@ -73,6 +74,7 @@ export default {
     const orginalTodo = ref(null);
     const loading = ref(false);
     const router = useRouter();
+    const subjectError = ref("");
 
     const { toastMessage, toastAlertType, showToast, triggerToast } =
       useToast();
@@ -112,6 +114,12 @@ export default {
     }
 
     const onSave = async () => {
+      subjectError.value = "";
+      if (!todo.value.subject) {
+        subjectError.value = "Subject is required";
+        return;
+      }
+
       try {
         let res;
         const data = {
@@ -119,7 +127,6 @@ export default {
           completed: todo.value.completed,
           body: todo.value.body,
         };
-
         if (props.editing) {
           res = await axios.put(
             "http://localhost:3000/todos/" + route.params.id,
@@ -150,6 +157,7 @@ export default {
       toastMessage,
       showToast,
       toastAlertType,
+      subjectError,
     };
   },
 };
