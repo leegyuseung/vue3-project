@@ -23,18 +23,18 @@
       </div>
     </div>
   </div>
-  <teleport to="#modal">
-    <ModalVue v-if="showModal" @close="closeModal" @delete="deleteTodo" />
+  <teleport to="#modal"
+    ><Modal v-if="showModal" @close="closeModal" @delete="deleteTodo" />
   </teleport>
 </template>
 
 <script>
 import { useRouter } from "vue-router";
-import ModalVue from "@/components/ModalVue.vue";
+import Modal from "@/components/DeleteModal.vue";
 import { ref } from "vue";
 
 export default {
-  components: { ModalVue },
+  components: { Modal },
   // props: ["todos"],
   props: {
     todos: {
