@@ -23,7 +23,9 @@
       </div>
     </div>
   </div>
-  <ModalVue v-if="showModal" @close="closeModal" @delete="deleteTodo" />
+  <teleport to="#modal">
+    <ModalVue v-if="showModal" @close="closeModal" @delete="deleteTodo" />
+  </teleport>
 </template>
 
 <script>
