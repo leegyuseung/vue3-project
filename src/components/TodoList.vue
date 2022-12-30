@@ -23,7 +23,7 @@
       </div>
     </div>
   </div>
-  <ModalVue v-if="showModal" @close="closeModal" />
+  <ModalVue v-if="showModal" @close="closeModal" @delete="deleteTodo" />
 </template>
 
 <script>
@@ -61,8 +61,11 @@ export default {
       showModal.value = false;
     };
 
-    const deleteTodo = (index) => {
-      emit("delete-todo", index);
+    const deleteTodo = () => {
+      emit("delete-todo", todoDeleteId.value);
+
+      showModal.value = false;
+      todoDeleteId.value = null;
     };
 
     const moveToPage = (todoId) => {
