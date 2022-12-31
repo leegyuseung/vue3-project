@@ -47,7 +47,7 @@
     },
     {
       "subject": "12414",
-      "completed": false,
+      "completed": true,
       "id": 12
     },
     {
@@ -58,15 +58,9 @@
     },
     {
       "subject": "asdad",
-      "completed": false,
+      "completed": true,
       "body": "asdad",
       "id": 14
-    },
-    {
-      "subject": "asfsgsg",
-      "completed": false,
-      "body": "asdasc",
-      "id": 15
     },
     {
       "subject": "dhdb",
